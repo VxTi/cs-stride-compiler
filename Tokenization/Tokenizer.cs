@@ -1,113 +1,53 @@
+using StrideCompiler.Exceptions;
+
 namespace StrideCompiler.Tokenization;
 
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
+using Logging;
+using Project;
 
 public static class Tokenizer
 {
-    public static readonly Dictionary<string, TokenType> TokenPatterns = new()
+    public static List<TokenSet> StartTokenization(Project project)
     {
-        { @"//[^\n]*", TokenType.Comment },
-        { @"/\*.*\*/", TokenType.CommentMultiline },
-        { @"\bpublic\b", TokenType.KeywordPublic },
-        { @"\bmodule\b", TokenType.KeywordModule },
-        { @"\band\b", TokenType.KeywordAnd },
-        { @"\bhas\b", TokenType.KeywordHas },
-        { @"\bas\b", TokenType.KeywordAs },
-        { @"\blet\b", TokenType.KeywordLet },
-        { @"\breturn\b", TokenType.KeywordReturn },
-        { @"\bif\b", TokenType.KeywordIf },
-        { @"\belse\b", TokenType.KeywordElse },
-        { @"\bclass\b", TokenType.KeywordClass },
-        { @"\bconst\b", TokenType.KeywordConst },
-        { @"\bdefine\b", TokenType.KeywordDefine },
-        { @"\basync\b", TokenType.KeywordAsync },
-        { @"\bthis\b", TokenType.KeywordThis },
-        { @"\benum\b", TokenType.KeywordEnum },
-        { @"\bswitch\b", TokenType.KeywordSwitch },
-        { @"\bcase\b", TokenType.KeywordCase },
-        { @"\bdefault\b", TokenType.KeywordDefault },
-        { @"\bbreak\b", TokenType.KeywordBreak },
-        { @"\bstruct\b", TokenType.KeywordStruct },
-        { @"\bimport\b", TokenType.KeywordImport },
-        { @"\bexternal\b", TokenType.KeywordExternal },
-        { @"\bnull\b", TokenType.KeywordNull },
-        { @"\boverride\b", TokenType.KeywordOverride },
-        { @"\bdo\b", TokenType.KeywordDo },
-        { @"\bwhile\b", TokenType.KeywordWhile },
-        { @"\bfor\b", TokenType.KeywordFor },
-        { @"\btry\b", TokenType.KeywordTry },
-        { @"\bcatch\b", TokenType.KeywordCatch },
-        { @"\bthrow\b", TokenType.KeywordThrow },
-        { @"\bnew\b", TokenType.KeywordNew },
-        { @"\bbool\b", TokenType.PrimitiveBool },
-        { @"\bstring\b", TokenType.PrimitiveString },
-        { @"\bchar\b", TokenType.PrimitiveChar },
-        { @"\bvoid\b", TokenType.PrimitiveVoid },
-        { @"\bauto\b", TokenType.PrimitiveAuto },
-        { @"\bi8\b", TokenType.PrimitiveInt8 },
-        { @"\bi16\b", TokenType.PrimitiveInt16 },
-        { @"\bi32\b", TokenType.PrimitiveInt32 },
-        { @"\bi64\b", TokenType.PrimitiveInt64 },
-        { @"\bf32\b", TokenType.PrimitiveFloat32 },
-        { @"\bf64\b", TokenType.PrimitiveFloat64 },
-        { @"\b[a-zA-Z_$][a-zA-Z0-9_$]*\b", TokenType.Identifier },
-        { @"[\+\-]?[0-9]+([eE][0-9]+)?", TokenType.NumberInteger },
-        { @"\btrue\b|\bfalse\b", TokenType.BooleanLiteral },
-        { @"[\+\-]?([0-9]+\.[eE][-+]?[0-9]+|[0-9]*\.?[0-9]+[eE][\+\-]?[0-9]+|[0-9]*\.[0-9]+|[0-9]+)", TokenType.NumberFloat },
-        { @"""[^""]*""", TokenType.StringLiteral },
-        { @"'(\\[^']|\\'|[^'])'", TokenType.CharLiteral },
-        { @"\.{3}", TokenType.ThreeDots },
-        { @"\[", TokenType.LSquareBracket },
-        { @"\]", TokenType.RSquareBracket },
-        { @"\{", TokenType.LBrace },
-        { @"\}", TokenType.RBrace },
-        { @"\(", TokenType.LParen },
-        { @"\)", TokenType.RParen },
-        { @",", TokenType.Comma },
-        { @"->", TokenType.DashRArrow },
-        { @"<-", TokenType.LArrowDash },
-        { @"<=", TokenType.LEquals },
-        { @">=", TokenType.GEquals },
-        { @"<<=", TokenType.DoubleLArrowEquals },
-        { @">>=", TokenType.DoubleRArrowEquals },
-        { @"\*\*=", TokenType.DoubleStarEquals },
-        { @"<<", TokenType.DoubleLArrow },
-        { @">>", TokenType.DoubleRArrow },
-        { @"\|\|", TokenType.DoublePipe },
-        { @"\+\+", TokenType.DoublePlus },
-        { @"--", TokenType.DoubleMinus },
-        { @"\*\*", TokenType.DoubleStar },
-        { @"::", TokenType.DoubleColon },
-        { @"==", TokenType.DoubleEquals },
-        { @"&&", TokenType.DoubleAmpersand },
-        { @"\*=", TokenType.StarEquals },
-        { @"/=", TokenType.SlashEquals },
-        { @"%=", TokenType.PercentEquals },
-        { @"&=", TokenType.AmpersandEquals },
-        { @"\|=", TokenType.PipeEquals },
-        { @"\^=", TokenType.CaretEquals },
-        { @"!=", TokenType.BangEquals },
-        { @"\+=", TokenType.PlusEquals },
-        { @"~=", TokenType.TildeEquals },
-        { @"-=", TokenType.MinusEquals },
-        { @":", TokenType.Colon },
-        { @";", TokenType.Semicolon },
-        { @"\?", TokenType.Question },
-        { @"\*", TokenType.Star },
-        { @"/", TokenType.Slash },
-        { @"%", TokenType.Percent },
-        { @"&", TokenType.Ampersand },
-        { @"\|", TokenType.Pipe },
-        { @"\^", TokenType.Caret },
-        { @"~", TokenType.Tilde },
-        { @"!", TokenType.Bang },
-        { @"\+", TokenType.Plus },
-        { @"-", TokenType.Minus },
-        { @">", TokenType.RArrow },
-        { @"<", TokenType.LArrow },
-        { @"=", TokenType.Equals },
-        { @"\.", TokenType.Dot }
-    };
+        List<TokenSet> tokenSets = new List<TokenSet>();
+        Logger.Log(LogLevel.Debug, "Started tokenizing project");
+
+        var mainFileContent = File.ReadAllLines(project.Config.MainFilePath);
+
+        tokenSets.Add(Tokenize(project.Config.MainFilePath, mainFileContent));
+
+        return tokenSets;
+    }
+
+    private static TokenSet Tokenize(string sourceFilePath, string[] sourceLines)
+    {
+        TokenSet tokenSet = new(sourceFilePath);
+        Logger.Log(LogLevel.Debug, $"Tokenizing source {sourceFilePath}");
+
+        int line, offset;
+        bool fallthrough;
+
+        for (line = 0; line < sourceLines.Length; line++)
+        { 
+            for (offset = 0; offset < sourceLines[line].Length; offset++)
+            {
+                fallthrough = false;
+                foreach (var (pattern, tokenType) in TokenPatterns.Patterns)
+                {
+                    var match = pattern.Match(sourceLines[line], offset); 
+                    if (match.Success)
+                    {
+                        tokenSet.Append(new(tokenType, match.Value));   
+                        fallthrough = true;
+                    }
+                }
+
+                if (!fallthrough)
+                    throw new CompilationException("Error whilst tokenizing source", [
+                        new ErrorFragment(sourceLines, line, offset, 1, "Illegal token")
+                    ]);
+            }
+        }
+        return tokenSet;
+    }
 }

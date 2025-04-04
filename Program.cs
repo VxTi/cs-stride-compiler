@@ -1,12 +1,21 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿namespace StrideCompiler;
 
-using StrideCompiler;
+using Logging;
+using Exceptions;
 
 class Program
 {
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
-        var project = Project.FromArgs(args);
-        
+        try
+        {
+            var project = Project.Project.FromArgs(args);
+            project.Compile();
+        }
+        catch (CompilationException ex)
+        {
+            Logger.Log("\e[31mFailed to compile:\n");
+            ex.Log();
+        }
     }
 }

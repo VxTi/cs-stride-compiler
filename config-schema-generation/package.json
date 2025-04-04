@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "generate": "node schema-generation.js"
+  },
+  "dependencies": {
+    "zod": "^3.24.2",
+    "zod-to-json-schema": "^3.24.5"
+  }
+}

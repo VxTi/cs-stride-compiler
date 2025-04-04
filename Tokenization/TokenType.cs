@@ -2,8 +2,7 @@ namespace StrideCompiler.Tokenization;
 
 public enum TokenType
 {
-    Comment,
-    CommentMultiline,
+    IgnoreToken,
     KeywordPublic,
     KeywordModule,
     KeywordAnd,

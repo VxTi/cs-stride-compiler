@@ -1,0 +1,10 @@
+{
+    "mainFile": "testmain.sr",
+    "projectRoot": "src",
+    "allowExternalDependencies": true,
+    "executableName": "test-executable",
+    "dependencies": [
+        "https://github.com/VxTi/cs-stride-compiler.git",
+        "test-library"
+    ]
+}
