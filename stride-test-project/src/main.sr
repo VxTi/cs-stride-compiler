@@ -1,0 +1,9 @@
+
+use (
+    system::io
+)
+
+fn main(): i8 {
+    println("TEST");
+    return 0;
+}

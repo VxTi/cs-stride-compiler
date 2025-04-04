@@ -4,7 +4,7 @@ using Logging;
 
 public class LocalDependencyResolver(Project project) : AbstractDependencyResolver(project)
 {
-    public override void Resolve(string dependency)
+    public override async Task Resolve(string dependency)
     {
         Logger.Log($"Resolving local dependency: {dependency}");
     }

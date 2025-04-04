@@ -3,8 +3,9 @@ namespace StrideCompiler.Tokenization;
 public enum TokenType
 {
     IgnoreToken,
-    KeywordPublic,
-    KeywordModule,
+    KeywordFn,
+    KeywordPub,
+    KeywordPkg,
     KeywordAnd,
     KeywordHas,
     KeywordAs,
@@ -14,7 +15,6 @@ public enum TokenType
     KeywordElse,
     KeywordClass,
     KeywordConst,
-    KeywordDefine,
     KeywordAsync,
     KeywordThis,
     KeywordEnum,
@@ -23,7 +23,7 @@ public enum TokenType
     KeywordDefault,
     KeywordBreak,
     KeywordStruct,
-    KeywordImport,
+    KeywordUse,
     KeywordExternal,
     KeywordNull,
     KeywordOverride,
@@ -38,7 +38,7 @@ public enum TokenType
     PrimitiveString,
     PrimitiveChar,
     PrimitiveVoid,
-    PrimitiveAuto,
+    PrimitiveVar,
     PrimitiveInt8,
     PrimitiveInt16,
     PrimitiveInt32,
@@ -101,5 +101,6 @@ public enum TokenType
     RArrow,
     LArrow,
     Equals,
-    Dot
+    Dot,
+    Keyword
 }

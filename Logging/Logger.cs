@@ -14,8 +14,9 @@ public static class Logger
             LogLevel.Debug => "DEBUG",
             LogLevel.Info => "INFO",
             LogLevel.Warn => "WARN",
+            LogLevel.Error => "ERROR",
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null)
         };
-        Log($"[{label}]:  {message}");
+        Log($"[{label}]: {message}");
     }
 }

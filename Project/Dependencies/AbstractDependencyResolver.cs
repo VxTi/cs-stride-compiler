@@ -4,5 +4,5 @@ public abstract class AbstractDependencyResolver(Project project)
 {
     protected readonly Project Project = project;
     
-    public abstract void Resolve(string dependency);
+    public abstract Task Resolve(string dependency);
 }

@@ -5,12 +5,12 @@ using Exceptions;
 
 class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         try
         {
             var project = Project.Project.FromArgs(args);
-            project.Compile();
+            await project.Compile();
         }
         catch (CompilationException ex)
         {

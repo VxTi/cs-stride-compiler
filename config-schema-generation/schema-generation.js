@@ -9,12 +9,21 @@ const fileName = 'stride-project-config-json-schema.json';
 
 const configSchema = z.object(
     {
+        name:
+            z.string()
+             .describe( 'The name of the project. Required for executable generation.' ),
+        author:
+            z.string()
+             .optional()
+             .describe( 'The name of the author of the project.' ),
+        version: z.string().describe( 'The version of the project,in semantic versioning format, e.g.' +
+                                      ' v1.0.0(-experimental)' ),
         mainFile:
             z.string()
              .optional()
              .describe( 'Refers to the path of the main file in the project. If omitted, the' +
                         ' compiler will look for a file named "main.sr" in the project root.' ),
-        projectRoot:
+        root:
             z.string()
              .optional()
              .describe(
@@ -26,9 +35,6 @@ const configSchema = z.object(
              .describe( 'Whether to allow external dependencies from the internet' +
                         ' or not, e.g. importing directly from GitHub. Disabled' +
                         ' by default.' ),
-        executableName:
-            z.string()
-             .describe( 'The name of the output executable file.' ),
         outputPath:
             z.string()
              .optional()

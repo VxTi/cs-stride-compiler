@@ -4,19 +4,14 @@ namespace StrideCompiler.Tokenization;
 
 public class TokenPatterns
 {
-    private static Regex CompilePattern(string pattern)
-    {
-        return new Regex("^" + pattern);
-    }
+    private static Regex CompilePattern(string pattern) => new("^" + pattern);
 
     public static readonly Dictionary<Regex, TokenType> Patterns = new()
     {
-        { CompilePattern(@"(//[^\n]*)|(\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*)|\s+"), TokenType.IgnoreToken },
-        { CompilePattern(@"/\*.*\*/"), TokenType.IgnoreToken },
-        { CompilePattern(@"public\b"), TokenType.KeywordPublic },
-        { CompilePattern(@"module\b"), TokenType.KeywordModule },
-        { CompilePattern(@"and\b"), TokenType.KeywordAnd },
-        { CompilePattern(@"has\b"), TokenType.KeywordHas },
+        { CompilePattern(@"#.+|\s+"), TokenType.IgnoreToken },
+        { CompilePattern(@"fn\b"), TokenType.KeywordFn },
+        { CompilePattern(@"pub\b"), TokenType.KeywordPub },
+        { CompilePattern(@"pkg\b"), TokenType.KeywordPkg },
         { CompilePattern(@"as\b"), TokenType.KeywordAs },
         { CompilePattern(@"let\b"), TokenType.KeywordLet },
         { CompilePattern(@"return\b"), TokenType.KeywordReturn },
@@ -24,7 +19,6 @@ public class TokenPatterns
         { CompilePattern(@"else\b"), TokenType.KeywordElse },
         { CompilePattern(@"class\b"), TokenType.KeywordClass },
         { CompilePattern(@"const\b"), TokenType.KeywordConst },
-        { CompilePattern(@"define\b"), TokenType.KeywordDefine },
         { CompilePattern(@"async\b"), TokenType.KeywordAsync },
         { CompilePattern(@"this\b"), TokenType.KeywordThis },
         { CompilePattern(@"enum\b"), TokenType.KeywordEnum },
@@ -33,7 +27,7 @@ public class TokenPatterns
         { CompilePattern(@"default\b"), TokenType.KeywordDefault },
         { CompilePattern(@"break\b"), TokenType.KeywordBreak },
         { CompilePattern(@"struct\b"), TokenType.KeywordStruct },
-        { CompilePattern(@"import\b"), TokenType.KeywordImport },
+        { CompilePattern(@"use\b"), TokenType.KeywordUse },
         { CompilePattern(@"external\b"), TokenType.KeywordExternal },
         { CompilePattern(@"null\b"), TokenType.KeywordNull },
         { CompilePattern(@"override\b"), TokenType.KeywordOverride },
@@ -48,7 +42,7 @@ public class TokenPatterns
         { CompilePattern(@"string\b"), TokenType.PrimitiveString },
         { CompilePattern(@"char\b"), TokenType.PrimitiveChar },
         { CompilePattern(@"void\b"), TokenType.PrimitiveVoid },
-        { CompilePattern(@"auto\b"), TokenType.PrimitiveAuto },
+        { CompilePattern(@"var\b"), TokenType.PrimitiveVar },
         { CompilePattern(@"i8\b"), TokenType.PrimitiveInt8 },
         { CompilePattern(@"i16\b"), TokenType.PrimitiveInt16 },
         { CompilePattern(@"i32\b"), TokenType.PrimitiveInt32 },
@@ -68,7 +62,7 @@ public class TokenPatterns
         { CompilePattern(@"\["), TokenType.LSquareBracket },
         { CompilePattern(@"\]"), TokenType.RSquareBracket },
         { CompilePattern(@"\{"), TokenType.LBrace },
-        { CompilePattern(@"\}"), TokenType.RBrace },
+        { CompilePattern("}"), TokenType.RBrace },
         { CompilePattern(@"\("), TokenType.LParen },
         { CompilePattern(@"\)"), TokenType.RParen },
         { CompilePattern(","), TokenType.Comma },
@@ -114,6 +108,7 @@ public class TokenPatterns
         { CompilePattern(">"), TokenType.RArrow },
         { CompilePattern("<"), TokenType.LArrow },
         { CompilePattern("="), TokenType.Equals },
-        { CompilePattern(@"\."), TokenType.Dot }
+        { CompilePattern(@"\."), TokenType.Dot },
+        { CompilePattern("[a-z][a-z0-9_]*"), TokenType.Keyword }, // Only allow snake_case
     };
 }

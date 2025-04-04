@@ -4,21 +4,29 @@
     "stride-config": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the project. Required for executable generation."
+        },
+        "author": {
+          "type": "string",
+          "description": "The name of the author of the project."
+        },
+        "version": {
+          "type": "string",
+          "description": "The version of the project,in semantic versioning format, e.g. v1.0.0(-experimental)"
+        },
         "mainFile": {
           "type": "string",
           "description": "Refers to the path of the main file in the project. If omitted, the compiler will look for a file named \"main.sr\" in the project root."
         },
-        "projectRoot": {
+        "root": {
           "type": "string",
           "description": "This refers to the path of the project root. If omitted, the compiler will attempt to look for the main file in the current working directory."
         },
         "allowExternalDependencies": {
           "type": "boolean",
           "description": "Whether to allow external dependencies from the internet or not, e.g. importing directly from GitHub. Disabled by default."
-        },
-        "executableName": {
-          "type": "string",
-          "description": "The name of the output executable file."
         },
         "outputPath": {
           "type": "string",
@@ -33,7 +41,8 @@
         }
       },
       "required": [
-        "executableName"
+        "name",
+        "version"
       ],
       "additionalProperties": false
     }

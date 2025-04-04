@@ -6,16 +6,16 @@ using Exceptions;
 using Logging;
 using Tokenization;
 
-public class Project(Config config)
+public class Project(ProjectConfig projectConfig)
 {
-    public readonly Config Config = config;
+    public readonly ProjectConfig ProjectConfig = projectConfig;
 
     public static Project FromArgs(string[] args)
     {
         var projectRootPath = GetArgv(args, Stride.ArgvProject);
         var projectConfigPath = Path.Join(
             projectRootPath ?? Directory.GetCurrentDirectory(),
-            Stride.BuildConfigFileName
+            Stride.ProjectConfigFileName
         );
 
         if (!File.Exists(projectConfigPath))
@@ -24,9 +24,9 @@ public class Project(Config config)
         var configContent = File.ReadAllText(projectConfigPath);
         try
         {
-            var config = JsonSerializer.Deserialize<Config>(configContent);
+            var config = JsonSerializer.Deserialize<ProjectConfig>(configContent);
             // Ensures that the file can actually be resolved
-            config.projectRoot = Path.Join(projectRootPath, config.projectRoot ?? ".");
+            config.root = Path.Join(projectRootPath, config.root ?? ".");
             return new Project(config);
         }
         catch (ArgumentNullException nullEx)
@@ -52,7 +52,7 @@ public class Project(Config config)
      */
     private static Project TryExtractProjectFromArguments(string[] args)
     {
-        var config = new Config();
+        var config = new ProjectConfig();
         config.mainFile = GetArgv(args, "target");
         var projectRoot = GetArgv(args, "root");
 
@@ -60,9 +60,9 @@ public class Project(Config config)
             throw new CompilationException(
                 $"Missing required project root argument. Please specify with \"{Stride.ArgvPrefix}root\"");
 
-        config.projectRoot = projectRoot;
+        config.root = projectRoot;
         config.allowExternalDependencies = HasFlag(args, "allow-external");
-        config.executableName = GetArgv(args, "executable");
+        config.name = GetArgv(args, "executable") ?? Stride.DefaultMainFile;
         config.outputPath = GetArgv(args, "out");
         config.dependencies = GetArgvArray(args, "dep");
 
@@ -126,15 +126,23 @@ public class Project(Config config)
         return args.Any(arg => arg.Equals(Stride.ArgvPrefix + flag));
     }
 
-    public void Compile()
+    public async Task Compile()
     {
         Logger.Log("Compiling project file...");
-        Logger.Log(JsonSerializer.Serialize(Config));
+        Logger.Log(JsonSerializer.Serialize(ProjectConfig));
 
-        if (!File.Exists(Config.MainFilePath))
-            throw new CompilationException(new FileNotFoundException("Main file not found.", Config.MainFilePath));
+        if (!File.Exists(ProjectConfig.MainFilePath))
+            throw new CompilationException($"Main file not found: {ProjectConfig.MainFilePath}");
 
-        DependencyResolver.ResolveFor(this);
+        await DependencyResolver.ResolveFor(this);
         var tokenSet = Tokenizer.StartTokenization(this);
+
+        foreach (var set in tokenSet)
+        {
+            foreach (var token in set.Tokens)
+            {
+                Logger.Log(token.ToString());
+            }
+        }
     }
 }

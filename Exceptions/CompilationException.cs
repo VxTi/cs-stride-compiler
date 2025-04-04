@@ -2,7 +2,6 @@ namespace StrideCompiler.Exceptions;
 
 using Logging;
 
-
 public class CompilationException : Exception
 {
     private readonly ErrorFragment[] _fragments = [];
@@ -33,11 +32,16 @@ public class CompilationException : Exception
 
         foreach (var fragment in _fragments)
         {
+            result.Append(Red);
+            result.AppendLine(fragment.Message);
+
             for (int i = 0; i < fragment.SourceLines.Length; i++)
             {
                 var line = fragment.SourceLines[i];
                 var startIdx = (i == 0) ? fragment.SourceIndexOffset : 0;
-                var endIdx = (i == fragment.SourceLines.Length - 1) ? startIdx + fragment.SourceErrorLength : line.Length;
+                var endIdx = (i == fragment.SourceLines.Length - 1)
+                    ? startIdx + fragment.SourceErrorLength
+                    : line.Length;
 
                 // Append the line before the error in yellow
                 result.Append(Yellow);
@@ -54,8 +58,6 @@ public class CompilationException : Exception
                 result.AppendLine();
             }
 
-            result.Append(Red);
-            result.AppendLine(fragment.Message);
             result.Append(Reset);
         }
 
@@ -64,6 +66,8 @@ public class CompilationException : Exception
 
     public void Log()
     {
-        Logger.Log("\e[31m" + Message + "\n" + ComposeErrorFragments());
+        if (_fragments.Length > 0)
+            Logger.Log(ComposeErrorFragments());
+        else Logger.Log($"\e[31m{Message}");
     }
 }
