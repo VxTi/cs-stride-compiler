@@ -1,6 +1,10 @@
-bin/
-obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
 /config-schema-generation/node_modules/
+/Compiler/bin/
+/Compiler/obj/
+/Dependencies/obj/
+/Dependencies/bin/
+
+

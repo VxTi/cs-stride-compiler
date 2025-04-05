@@ -1,0 +1,10 @@
+{
+    "name": "Test-Executable",
+    "author": "Luca Warmenhoven",
+    "version": "v1.0.0",
+    "root": "src",
+    "allowExternalDependencies": true,
+    "dependencies": [
+        "https://github.com/VxTi/stride-test-project@v1.0.0"
+    ]
+}
