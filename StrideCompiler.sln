@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrideCompiler", "./Compiler/Compiler.csproj", "{C08A3364-B395-4719-922B-F8C032707D47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.Compiler", "Stride.Compiler\Stride.Compiler.csproj", "{C08A3364-B395-4719-922B-F8C032707D47}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "./Dependencies/Dependencies.csproj", "{37F977CC-5436-4252-A20E-720F2F5FCD94}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{B547C1FF-48D4-46F2-BD09-6BF8FB6EF577}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dependencies", "Dependencies\Dependencies.csproj", "{F1B09727-1175-4299-953A-C71CF3D6B711}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.Dependencies", "Stride.Dependencies\Stride.Dependencies.csproj", "{F1B09727-1175-4299-953A-C71CF3D6B711}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{88848DB3-4769-44E1-A432-A13FB273CB0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.Common", "Stride.Common\Stride.Common.csproj", "{88848DB3-4769-44E1-A432-A13FB273CB0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

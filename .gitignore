@@ -2,9 +2,11 @@
 riderModule.iml
 /_ReSharper.Caches/
 /config-schema-generation/node_modules/
-/Compiler/bin/
-/Compiler/obj/
-/Dependencies/obj/
-/Dependencies/bin/
+/Stride.Compiler/bin/
+/Stride.Compiler/obj/
+/Stride.Dependencies/obj/
+/Stride.Dependencies/bin/
+/Stride.Common/obj/
+/Stride.Common/bin/
 
 
