@@ -23,13 +23,17 @@ const configSchema = z.object(
              .optional()
              .describe( 'Refers to the path of the main file in the project. If omitted, the' +
                         ' compiler will look for a file named "main.sr" in the project root.' ),
+        sourceRoot:
+            z.string()
+             .optional()
+             .describe( 'Relative path to the source directory of the project. Defaults to \'./src\'' ),
         root:
             z.string()
              .optional()
              .describe(
                  'This refers to the path of the project root. If omitted, the compiler will attempt to look for' +
                  ' the main file in the current working directory.' ),
-        allowExternalDependencies:
+        externalDependencies:
             z.boolean()
              .optional()
              .describe( 'Whether to allow external dependencies from the internet' +

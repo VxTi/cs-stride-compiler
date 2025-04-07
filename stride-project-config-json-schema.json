@@ -20,11 +20,15 @@
           "type": "string",
           "description": "Refers to the path of the main file in the project. If omitted, the compiler will look for a file named \"main.sr\" in the project root."
         },
+        "sourceRoot": {
+          "type": "string",
+          "description": "Relative path to the source directory of the project. Defaults to './src'"
+        },
         "root": {
           "type": "string",
           "description": "This refers to the path of the project root. If omitted, the compiler will attempt to look for the main file in the current working directory."
         },
-        "allowExternalDependencies": {
+        "externalDependencies": {
           "type": "boolean",
           "description": "Whether to allow external dependencies from the internet or not, e.g. importing directly from GitHub. Disabled by default."
         },

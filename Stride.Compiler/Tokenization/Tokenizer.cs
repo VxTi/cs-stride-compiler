@@ -1,5 +1,5 @@
+using Stride.Common;
 using Stride.Common.Logging;
-using Stride.Common.Project;
 using Stride.Compiler.Exceptions;
 
 namespace Stride.Compiler.Tokenization;
@@ -11,14 +11,14 @@ public static class Tokenizer
         List<TokenSet> tokenSets = new List<TokenSet>();
         Logger.Log(LogLevel.Debug, "Started tokenizing project");
 
-        var mainFileContent = File.ReadAllText(project.Config.MainFilePath);
+        var mainFileContent = File.ReadAllText(project.ProjectConfig.MainFilePath);
 
-        tokenSets.Add(Tokenize(project.Config.MainFilePath, mainFileContent));
+        tokenSets.Add(Tokenize(project.ProjectConfig.MainFilePath, mainFileContent));
 
         return tokenSets;
     }
 
-    private static TokenSet Tokenize(string sourceFilePath, string sourceContent)
+    public static TokenSet Tokenize(string sourceFilePath, string sourceContent)
     {
         TokenSet tokenSet = new(sourceFilePath);
         Logger.Log(LogLevel.Debug, $"Tokenizing source {sourceFilePath}");

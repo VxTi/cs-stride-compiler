@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Stride.Dependencies.GitHub;
+namespace Stride.Common.Dependencies;
 
 [Serializable]
 public struct Asset
@@ -29,11 +29,11 @@ public struct ReleaseTagInfo
 [Serializable]
 public struct Release
 {
-    [JsonPropertyName("zipball_url")] public string ZipUrl { get; set; }
+    [JsonPropertyName("zipball_url")] public required string ZipUrl { get; set; }
 
-    [JsonPropertyName("prerelease")] public bool PreRelease { get; set; }
+    [JsonPropertyName("prerelease")] public required bool PreRelease { get; set; }
 
-    [JsonPropertyName("tag_name")] public string TagName { get; set; }
+    [JsonPropertyName("tag_name")] public required string TagName { get; set; }
 
-    [JsonPropertyName("assets")] public Asset[] Assets { get; set; }
+    [JsonPropertyName("assets")] public required Asset[] Assets { get; set; }
 }
