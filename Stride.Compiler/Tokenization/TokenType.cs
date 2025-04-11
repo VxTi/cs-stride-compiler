@@ -5,7 +5,7 @@ public enum TokenType
     IgnoreToken,
     KeywordFn,
     KeywordPub,
-    KeywordPkg,
+    KeywordPackage,
     KeywordAnd,
     KeywordHas,
     KeywordAs,

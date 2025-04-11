@@ -34,7 +34,7 @@ public static class Logger
             LogLevel.Debug => "\e[34m",
             LogLevel.Info => "",
             LogLevel.Warn => "\e[33m",
-            LogLevel.Error => "\e[32m",
+            LogLevel.Error => "\e[31m",
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null)
         };
 
@@ -71,6 +71,7 @@ public static class Logger
             Console.Write(new string('─', colWidths[col]));
             Console.Write(col < colCount - 1 ? "┬" : "┐");
         }
+
         Console.WriteLine();
 
         for (int rowIndex = 0; rowIndex < items.Length; rowIndex++)
@@ -86,6 +87,7 @@ public static class Logger
                 Console.Write(padded);
                 Console.Write("│");
             }
+
             Console.WriteLine();
 
             // Header separator
@@ -97,6 +99,7 @@ public static class Logger
                     Console.Write(new string('─', colWidths[col]));
                     Console.Write(col < colCount - 1 ? "┼" : "┤");
                 }
+
                 Console.WriteLine();
             }
         }
@@ -108,6 +111,7 @@ public static class Logger
             Console.Write(new string('─', colWidths[col]));
             Console.Write(col < colCount - 1 ? "┴" : "┘");
         }
+
         Console.WriteLine(Reset);
     }
 }

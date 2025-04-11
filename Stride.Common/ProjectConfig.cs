@@ -9,7 +9,7 @@ public class ProjectConfig
 {
     [JsonPropertyName("name")] public string Name { get; set; } = Globals.DefaultExecutableFileName;
 
-    [JsonPropertyName("author")] public string? Author { get; set; } = "Unknown";
+    [JsonPropertyName("author")] public string? Author { get; set; } = Environment.UserName;
 
     [JsonPropertyName("version")] public string Version { get; set; } = "1.0.0";
 
@@ -20,13 +20,12 @@ public class ProjectConfig
     [JsonPropertyName("sourceRoot")] public string ProjectSourceRootDirectoryName { get; set; } = "src";
 
 
-    [JsonPropertyName("externalDependencies")]
-    public bool? AllowExternalDependencies { get; set; } = true;
+    [JsonPropertyName("externalPackages")] public bool? AllowExternalPackages { get; set; } = true;
 
     [JsonPropertyName("outputPath")]
     public string? OutputBuildDirectoryName { get; set; } = Globals.DefaultOutputDirectory;
 
-    [JsonPropertyName("dependencies")] public string[] Dependencies { get; set; } = [];
+    [JsonPropertyName("packages")] public string[] Packages { get; set; } = [];
 
     [JsonIgnore] public string OutputBuildDirectorPath => Path.Join(ProjectRootPath, OutputBuildDirectoryName);
 
@@ -35,26 +34,32 @@ public class ProjectConfig
     [JsonIgnore]
     public string MainFilePath => Path.Combine(ProjectRootPath, ProjectSourceRootDirectoryName, MainFileName);
 
-    [JsonIgnore] public string ConfigFilePath { get; set; } = Path.Combine(Directory.GetCurrentDirectory(), Globals.ProjectConfigFileName);
-    
     [JsonIgnore]
-    public string DependencyCacheDirPath =>
-        Path.Combine(ProjectRootPath, Globals.DependencyDirName);
+    public string ConfigFilePath { get; set; } =
+        Path.Combine(Directory.GetCurrentDirectory(), Globals.ProjectConfigFileName);
 
     [JsonIgnore]
-    public string DependencyCacheFilePath =>
-        Path.Combine(DependencyCacheDirPath, Globals.DependencyCacheFileName);
+    public string PackageCacheDirPath =>
+        Path.Combine(ProjectRootPath, Globals.PackagesDirName);
+
+    [JsonIgnore]
+    public string PackageCacheFilePath =>
+        Path.Combine(PackageCacheDirPath, Globals.PackageCacheFileName);
 
     public static ProjectConfig? GetFromPath(string path)
     {
         try
         {
             var projectConfigPath = Path.Join(path, Globals.ProjectConfigFileName);
-            var config = File.Exists(projectConfigPath)
-                ? JsonSerializer.Deserialize<ProjectConfig>(File.ReadAllText(projectConfigPath))
-                : null;
 
-            if (config is null)
+            if (!File.Exists(projectConfigPath))
+                return null;
+
+            var fileContent = File.ReadAllText(projectConfigPath);
+            var config =
+                JsonSerializer.Deserialize<ProjectConfig>(fileContent, JsonSerializationContext.Default.ProjectConfig);
+
+            if (config == null)
                 return null;
 
             config.ProjectRootPath = Path.Combine(path, config.ProjectRootPath);
@@ -68,5 +73,11 @@ public class ProjectConfig
         }
 
         return null;
+    }
+
+    public void UpdateConfigurationFile()
+    {
+        var serialized = JsonSerializer.Serialize(this, JsonSerializationContext.Instance.ProjectConfig);
+        File.WriteAllText(ConfigFilePath, serialized);
     }
 }

@@ -11,7 +11,7 @@ public class Token(TokenType tokenType, string value)
         {
             TokenType.KeywordFn => "Fn",
             TokenType.KeywordPub => "Pub",
-            TokenType.KeywordPkg => "Module",
+            TokenType.KeywordPackage => "Module",
             TokenType.KeywordAnd => "And",
             TokenType.KeywordHas => "Has",
             TokenType.KeywordAs => "As",
@@ -60,7 +60,7 @@ public class Token(TokenType tokenType, string value)
             _ => Value
         };
     }
-    
+
     public override string ToString()
     {
         return StringifyTokenType() + ": " + Value;

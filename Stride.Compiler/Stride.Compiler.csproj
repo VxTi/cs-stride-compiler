@@ -3,6 +3,10 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PublishTrimmed>true</PublishTrimmed>
+        <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>None</DebugType>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="../Stride.Common/Stride.Common.csproj"/>

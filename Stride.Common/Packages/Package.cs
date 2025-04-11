@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
 
-namespace Stride.Common.Dependencies;
+namespace Stride.Common.Packages;
 
 [Serializable]
-public class Dependency
+public class Package
 {
     [JsonPropertyName("name")] public required string Name { get; set; }
     [JsonPropertyName("version")] public required string Version { get; set; }

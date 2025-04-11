@@ -1,4 +1,3 @@
-using Stride.Common;
 using Stride.Common.Logging;
 using Stride.Compiler.Exceptions;
 
@@ -6,18 +5,6 @@ namespace Stride.Compiler.Tokenization;
 
 public static class Tokenizer
 {
-    public static List<TokenSet> StartTokenization(Project project)
-    {
-        List<TokenSet> tokenSets = new List<TokenSet>();
-        Logger.Log(LogLevel.Debug, "Started tokenizing project");
-
-        var mainFileContent = File.ReadAllText(project.ProjectConfig.MainFilePath);
-
-        tokenSets.Add(Tokenize(project.ProjectConfig.MainFilePath, mainFileContent));
-
-        return tokenSets;
-    }
-
     public static TokenSet Tokenize(string sourceFilePath, string sourceContent)
     {
         TokenSet tokenSet = new(sourceFilePath);
@@ -25,32 +12,36 @@ public static class Tokenizer
 
         for (var index = 0; index < sourceContent.Length;)
         {
-            var matched = false;
-            foreach (var (pattern, tokenType) in TokenPatterns.Patterns)
-            {
-                var match = pattern.Match(sourceContent, index);
+            var token = TryMatch(sourceContent, index);
 
-                if (!match.Success)
-                    continue;
+            if (token == null)
+                throw new CompilationException($"Illegal token found: {sourceContent[index]}");
+            
+            index += token.Value.Length;
+            Logger.Debug($"Skipping {token.Value.Length} ({token.Type})");
+            if (token.Type == TokenType.IgnoreToken)
+                continue;
 
-                index += match.Length;
-                matched = true;
+            Logger.Log(LogLevel.Debug, $"Tokenized {token.Type} {token.Value}");
 
-                // We won't want any comments or whitespace in our set
-                if (tokenType == TokenType.IgnoreToken)
-                    continue;
-
-                Logger.Log(LogLevel.Debug, $"Tokenized [{index}]: [{tokenType}] {match.Value} ({match.Length})");
-
-                tokenSet.Append(new(tokenType, match.Value));
-                break;
-            }
-
-            if (!matched)
-                throw new CompilationException(
-                    $"Illegal token found: {sourceContent[index + (index + 1 >= sourceContent.Length ? 0 : 1)]}");
+            tokenSet.Append(token);
         }
 
         return tokenSet;
+    }
+
+    private static Token? TryMatch(string source, int offset)
+    {
+        foreach (var (pattern, tokenType) in TokenPatterns.Patterns)
+        {
+            var match = pattern.Match(source, offset);
+
+            if (!match.Success)
+                continue;
+            
+            return new(tokenType, match.Value);
+        }
+
+        return null;
     }
 }

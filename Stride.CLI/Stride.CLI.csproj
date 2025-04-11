@@ -5,14 +5,16 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PublishTrimmed>true</PublishTrimmed>
+        <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+        <AssemblyName>stride</AssemblyName>
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>None</DebugType>
     </PropertyGroup>
+
     <ItemGroup>
         <ProjectReference Include="../Stride.Common/Stride.Common.csproj"/>
-    </ItemGroup>
-    <ItemGroup>
         <ProjectReference Include="../Stride.Compiler/Stride.Compiler.csproj"/>
-    </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+        <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1"/>
     </ItemGroup>
 </Project>

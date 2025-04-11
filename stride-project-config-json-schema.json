@@ -28,20 +28,20 @@
           "type": "string",
           "description": "This refers to the path of the project root. If omitted, the compiler will attempt to look for the main file in the current working directory."
         },
-        "externalDependencies": {
+        "externalPackages": {
           "type": "boolean",
-          "description": "Whether to allow external dependencies from the internet or not, e.g. importing directly from GitHub. Disabled by default."
+          "description": "Whether to allow external packages from the internet or not, e.g. importing directly from GitHub. Disabled by default."
         },
         "outputPath": {
           "type": "string",
           "description": "Path where the output executable will be generated. Defaults to \"./build/<executable>\""
         },
-        "dependencies": {
+        "packages": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "A list of external dependencies, either by URL or name. If a name is provided, the compiler will search for them in \"./dependencies/<name>\""
+          "description": "A list of external packages, either by URL or name. If a name is provided, the compiler will search for them in \"./packages/<name>\""
         }
       },
       "required": [

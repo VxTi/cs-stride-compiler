@@ -6,26 +6,15 @@ namespace Stride.Compiler;
 
 public static class Compiler
 {
-    public static async Task Compile(Project project)
+    public static async Task CompileFile(string filePath, string[] packages)
     {
-        Logger.Log("Compiling project file...");
+        if (!File.Exists(filePath))
+            throw new Exception($"File not found: {filePath}");
 
-        if (!File.Exists(project.ProjectConfig.MainFilePath))
-            throw new Exception($"Main file not found: {project.ProjectConfig.MainFilePath}");
+        var fileContent = await File.ReadAllTextAsync(filePath);
+        var tokenSet = Tokenizer.Tokenize(filePath, fileContent);
 
-        var tokenSet = Tokenizer.StartTokenization(project);
-
-        foreach (var token in tokenSet.SelectMany(set => set.Tokens))
-        {
+        foreach (var token in tokenSet.Tokens)
             Logger.Log(token.ToString());
-        }
-    }
-
-    public static async Task Compile(string[] filePaths, string[] dependencyNames)
-    {
-        foreach (var filePath in filePaths)
-        {
-            Logger.Log($"Compiling file {filePath}");
-        }
     }
 }

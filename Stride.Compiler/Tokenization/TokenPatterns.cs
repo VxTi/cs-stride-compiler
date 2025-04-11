@@ -2,16 +2,21 @@ using System.Text.RegularExpressions;
 
 namespace Stride.Compiler.Tokenization;
 
-public class TokenPatterns
+public static class TokenPatterns
 {
     private static Regex CompilePattern(string pattern) => new("^" + pattern);
 
     public static readonly Dictionary<Regex, TokenType> Patterns = new()
     {
-        { CompilePattern(@"#.+|\s+"), TokenType.IgnoreToken },
+        { CompilePattern(@"#.+"), TokenType.IgnoreToken },
+        { CompilePattern(@"\s"), TokenType.IgnoreToken }, // Ignore whitespace
+        { CompilePattern("""
+                         "[^"]*"
+                         """), TokenType.StringLiteral },
+        { CompilePattern(@"'(\\[^']|\\'|[^'])'"), TokenType.CharLiteral },
         { CompilePattern(@"fn\b"), TokenType.KeywordFn },
-        { CompilePattern(@"pub\b"), TokenType.KeywordPub },
-        { CompilePattern(@"pkg\b"), TokenType.KeywordPkg },
+        { CompilePattern(@"public\b"), TokenType.KeywordPub },
+        { CompilePattern(@"package\b"), TokenType.KeywordPackage },
         { CompilePattern(@"as\b"), TokenType.KeywordAs },
         { CompilePattern(@"let\b"), TokenType.KeywordLet },
         { CompilePattern(@"return\b"), TokenType.KeywordReturn },
@@ -56,8 +61,6 @@ public class TokenPatterns
             CompilePattern(@"[\+\-]?([0-9]+\.[eE][-+]?[0-9]+|[0-9]*\.?[0-9]+[eE][\+\-]?[0-9]+|[0-9]*\.[0-9]+|[0-9]+)"),
             TokenType.NumberFloat
         },
-        { CompilePattern(@"""[^""]*"""), TokenType.StringLiteral },
-        { CompilePattern(@"'(\\[^']|\\'|[^'])'"), TokenType.CharLiteral },
         { CompilePattern(@"\.{3}"), TokenType.ThreeDots },
         { CompilePattern(@"\["), TokenType.LSquareBracket },
         { CompilePattern(@"\]"), TokenType.RSquareBracket },
@@ -109,6 +112,6 @@ public class TokenPatterns
         { CompilePattern("<"), TokenType.LArrow },
         { CompilePattern("="), TokenType.Equals },
         { CompilePattern(@"\."), TokenType.Dot },
-        { CompilePattern("[a-z][a-z0-9_]*"), TokenType.Keyword }, // Only allow snake_case
+        { CompilePattern(@"\w+"), TokenType.Keyword },
     };
 }

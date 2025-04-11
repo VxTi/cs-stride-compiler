@@ -1,18 +1,18 @@
 using System.Text.Json;
-using Stride.Common.Dependencies;
+using Stride.Common.Packages;
 using Stride.Common.Logging;
 
 namespace Stride.Common;
 
 public class Project
 {
-    public readonly DependencyCache DependencyCache;
+    public readonly PackageCache PackageCache;
     public readonly ProjectConfig ProjectConfig;
 
     private Project(ProjectConfig projectConfig)
     {
         ProjectConfig = projectConfig;
-        DependencyCache = new DependencyCache(projectConfig);
+        PackageCache = new PackageCache(projectConfig);
     }
 
     public static Project FromConfig(ProjectConfig config)

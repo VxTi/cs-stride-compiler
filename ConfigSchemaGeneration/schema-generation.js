@@ -33,22 +33,22 @@ const configSchema = z.object(
              .describe(
                  'This refers to the path of the project root. If omitted, the compiler will attempt to look for' +
                  ' the main file in the current working directory.' ),
-        externalDependencies:
+        externalPackages:
             z.boolean()
              .optional()
-             .describe( 'Whether to allow external dependencies from the internet' +
+             .describe( 'Whether to allow external packages from the internet' +
                         ' or not, e.g. importing directly from GitHub. Disabled' +
                         ' by default.' ),
         outputPath:
             z.string()
              .optional()
              .describe( 'Path where the output executable will be generated. Defaults to "./build/<executable>"' ),
-        dependencies:
+        packages:
             z.array( z.string() )
              .optional()
              .describe(
-                 'A list of external dependencies, either by URL or name. If a name is provided, the compiler will' +
-                 ' search for them in "./dependencies/<name>"'
+                 'A list of external packages, either by URL or name. If a name is provided, the compiler will' +
+                 ' search for them in "./packages/<name>"'
              )
     } );
 

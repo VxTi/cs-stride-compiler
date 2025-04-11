@@ -1,6 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Stride.Common;
 
-public abstract class AbstractCache<TCacheValue>
+public abstract class AbstractCache<
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] TCacheValue>
 {
     protected List<TCacheValue> Items { get; set; }
 
@@ -8,14 +11,14 @@ public abstract class AbstractCache<TCacheValue>
     protected static readonly int QueryFieldCount = typeof(TCacheValue).GetProperties().Length;
     protected readonly KeyValuePair<CacheResult, TCacheValue?> CacheMissResult = new(CacheResult.Miss, default);
     protected bool HasChanges = false;
-    
+
     public AbstractCache(IEnumerable<TCacheValue> items)
     {
         Items = items.ToList();
     }
 
     public abstract void Clear();
-    
+
     public abstract KeyValuePair<CacheResult, TCacheValue?> Query(string query);
 
     public abstract void Add(TCacheValue value);
@@ -24,7 +27,7 @@ public abstract class AbstractCache<TCacheValue>
 
     public abstract void UpdateLocalCache();
 
-    public abstract void Remove(string query);
+    public abstract int Remove(string query);
 }
 
 public enum CacheResult

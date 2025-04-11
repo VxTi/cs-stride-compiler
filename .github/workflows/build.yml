@@ -1,0 +1,25 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Build Compiler
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          sh ./build.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-output
+          path: ./build/stride
