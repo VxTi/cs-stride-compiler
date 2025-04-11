@@ -1,4 +1,5 @@
 echo "Compiling project..."
+
 dotnet publish ./Stride.CLI/Stride.CLI.csproj \
   -c Release \
   -r osx-arm64 \
@@ -6,4 +7,4 @@ dotnet publish ./Stride.CLI/Stride.CLI.csproj \
   /p:PublishSingleFile=true \
   /p:PublishTrimmed=true \
   /p:EnableCompressionInSingleFile=true \
-  -o /Users/luca/bin
+  -o /Users/"$USER"/.bin

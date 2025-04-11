@@ -4,18 +4,22 @@ namespace Stride.Compiler.Tokenization;
 
 public static class TokenPatterns
 {
-    private static Regex CompilePattern(string pattern) => new("^" + pattern);
+    private static Regex CompilePattern(string pattern) => new(@"\G" + pattern);
 
     public static readonly Dictionary<Regex, TokenType> Patterns = new()
     {
-        { CompilePattern(@"#.+"), TokenType.IgnoreToken },
-        { CompilePattern(@"\s"), TokenType.IgnoreToken }, // Ignore whitespace
-        { CompilePattern("""
-                         "[^"]*"
-                         """), TokenType.StringLiteral },
+        { CompilePattern(@"#[^\n\r]+?[\n\r]"), TokenType.IgnoreToken },
+        { CompilePattern(@"\s+"), TokenType.IgnoreToken }, // Ignore whitespace
+        {
+            CompilePattern("""
+                           "[^"]*"
+                           """),
+            TokenType.StringLiteral
+        },
         { CompilePattern(@"'(\\[^']|\\'|[^'])'"), TokenType.CharLiteral },
+        { CompilePattern(@"defer\b"), TokenType.KeywordDefer },
         { CompilePattern(@"fn\b"), TokenType.KeywordFn },
-        { CompilePattern(@"public\b"), TokenType.KeywordPub },
+        { CompilePattern(@"public\b"), TokenType.KeywordPublic },
         { CompilePattern(@"package\b"), TokenType.KeywordPackage },
         { CompilePattern(@"as\b"), TokenType.KeywordAs },
         { CompilePattern(@"let\b"), TokenType.KeywordLet },
@@ -32,7 +36,7 @@ public static class TokenPatterns
         { CompilePattern(@"default\b"), TokenType.KeywordDefault },
         { CompilePattern(@"break\b"), TokenType.KeywordBreak },
         { CompilePattern(@"struct\b"), TokenType.KeywordStruct },
-        { CompilePattern(@"use\b"), TokenType.KeywordUse },
+        { CompilePattern(@"import\b"), TokenType.KeywordImport },
         { CompilePattern(@"external\b"), TokenType.KeywordExternal },
         { CompilePattern(@"null\b"), TokenType.KeywordNull },
         { CompilePattern(@"override\b"), TokenType.KeywordOverride },
@@ -52,6 +56,10 @@ public static class TokenPatterns
         { CompilePattern(@"i16\b"), TokenType.PrimitiveInt16 },
         { CompilePattern(@"i32\b"), TokenType.PrimitiveInt32 },
         { CompilePattern(@"i64\b"), TokenType.PrimitiveInt64 },
+        { CompilePattern(@"ui8\b"), TokenType.PrimitiveUInt8 },
+        { CompilePattern(@"ui16\b"), TokenType.PrimitiveUInt16 },
+        { CompilePattern(@"ui32\b"), TokenType.PrimitiveUInt32 },
+        { CompilePattern(@"ui64\b"), TokenType.PrimitiveUInt64 },
         { CompilePattern(@"f32\b"), TokenType.PrimitiveFloat32 },
         { CompilePattern(@"f64\b"), TokenType.PrimitiveFloat64 },
         { CompilePattern(@"[a-zA-Z_$][a-zA-Z0-9_$]*\b"), TokenType.Identifier },
