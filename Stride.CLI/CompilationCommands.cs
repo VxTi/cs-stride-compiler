@@ -13,24 +13,23 @@ public class CompilationCommands : ICommandFactory
         cCompile.AddAlias("c");
 
         cCompile.SetHandler(() =>
-            CliUtilities.TryRunForProject(project =>
+            CliUtilities.TryRunForProject(async void (project) =>
             {
-                Logger.Info($"Compiling project {project.ProjectConfig.Name}@{project.ProjectConfig.Version}");
-                var startTime = DateTime.Now;
                 try
                 {
-                    Task.Run(() =>
-                        Compiler.Compiler.CompileFile(project.ProjectConfig.MainFilePath,
-                            project.ProjectConfig.Packages)).Wait();
+                    Logger.Info($"Compiling project {project.ProjectConfig.Name}@{project.ProjectConfig.Version}");
+                    
+                    var startTime = DateTime.Now;
+                    await Compiler.Compiler.CompileFile(project.ProjectConfig.MainFilePath,
+                        project.ProjectConfig.Packages);
+                    var dT = DateTime.Now - startTime;
+                    
+                    Logger.Info($"Compilation finished in {dT.Minutes}m {dT.Seconds}s");
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"An error occurred whilst compiling: {e.Message}");
-                    return;
                 }
-
-                var dT = DateTime.Now - startTime;
-                Logger.Info($"Compilation finished in {dT.Minutes}m {dT.Seconds}s");
             }));
 
         parent.AddCommand(cCompile);

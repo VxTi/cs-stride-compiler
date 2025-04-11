@@ -3,7 +3,7 @@ name: Build Stride Compiler
 on:
   push:
     branches:
-      - main
+      - build
 
 jobs:
   deploy:
