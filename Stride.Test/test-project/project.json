@@ -1,0 +1,11 @@
+{
+  "name": "output",
+  "author": "luca",
+  "version": "1.0.0",
+  "mainFile": "main.sr",
+  "root": ".",
+  "sourceRoot": "src",
+  "externalPackages": true,
+  "outputPath": "bin",
+  "packages": []
+}

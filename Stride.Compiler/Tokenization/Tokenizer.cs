@@ -7,7 +7,7 @@ public static class Tokenizer
 {
     public static TokenSet Tokenize(string sourceFilePath, string sourceContent)
     {
-        TokenSet tokenSet = new(sourceFilePath);
+        List<Token> tokens = new();
 
         for (var index = 0; index < sourceContent.Length;)
         {
@@ -24,10 +24,10 @@ public static class Tokenizer
             if (token.Type == TokenType.IgnoreToken)
                 continue;
 
-            tokenSet.Append(token);
+            tokens.Add(token);
         }
 
-        return tokenSet;
+        return new TokenSet(sourceFilePath, tokens);
     }
 
     private static Token? TryMatch(string source, int offset)

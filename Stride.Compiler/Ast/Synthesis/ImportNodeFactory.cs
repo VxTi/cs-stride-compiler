@@ -1,3 +1,4 @@
+using Stride.Common.Logging;
 using Stride.Compiler.Ast.Nodes;
 using Stride.Compiler.Exceptions;
 using Stride.Compiler.Tokenization;
@@ -6,61 +7,62 @@ namespace Stride.Compiler.Ast.Synthesis;
 
 public class ImportNodeFactory : AbstractTreeNodeFactory
 {
-    public override AstNode? Synthesize(TokenSet tokens)
+    public override void Synthesize(TokenSet set, AstNode rootNode)
     {
-        tokens.Consume(TokenType.KeywordImport);
+        set.Consume(TokenType.KeywordImport);
+        
+        Logger.Info("Parsing import");
 
-        if (tokens.PeekEqual(TokenType.LParen))
+        if (set.PeekEqual(TokenType.LParenthesis))
         {
-            var imports = ParseSequentialImports(tokens);
-            return new ImportNode(imports);
+            var imports = ParseSequentialImports(set);
+            rootNode.Children.Add(new ImportNode(imports));
+        }
+        else
+        {
+            rootNode.Children.Add(new ImportNode([ParseImportEntry(set)]));
         }
          
-        var singularImport = ParseSingularImport(tokens);
-        tokens.ConsumeOptional(TokenType.Semicolon); // Optional
-        return new ImportNode([singularImport]);
+        set.ConsumeOptional(TokenType.Semicolon);
     }
 
-    private static List<ImportNode.Import> ParseSequentialImports(TokenSet tokenSet)
+    private static List<ImportNode.Import> ParseSequentialImports(TokenSet set)
     {
-        tokenSet.Consume(TokenType.LParen);
+        set.Consume(TokenType.LParenthesis);
         List<ImportNode.Import> imports = new();
+        
+        imports.Add(ParseImportEntry(set));
 
         do
         {
-            var initial = tokenSet.RequiresNext(TokenType.Identifier);
-            List<string> namespaceIdentifiers = [initial.Value];
-            
-            while (tokenSet.PeekEqual(TokenType.Dot))
-            {
-                tokenSet.Consume(TokenType.Dot);
-                var nextToken = tokenSet.RequiresNext(TokenType.Identifier);
-                namespaceIdentifiers.Add(nextToken.Value);
-                tokenSet.ConsumeOptional(TokenType.Comma);
-            }
+            set.Consume(TokenType.Comma);
+            imports.Add(ParseImportEntry(set));
+        } while (!set.PeekEqual(TokenType.RParenthesis) && set.Remaining() > 0);
 
-            imports.Add(new(namespaceIdentifiers));
-
-        } while (!tokenSet.PeekEqual(TokenType.RParen));
-
-        tokenSet.Consume(TokenType.RParen);
+        set.ConsumeOptional(TokenType.Comma); // Optional trailing comma
+        set.Consume(TokenType.RParenthesis);
 
         return imports;
     }
     
-    private static ImportNode.Import ParseSingularImport(TokenSet tokenSet)
+    private static ImportNode.Import ParseImportEntry(TokenSet tokenSet)
     {
-        var nextToken = tokenSet.Next();
+        var identifier = tokenSet.RequiresNext(TokenType.Identifier).Value;
+        List<string> nsIdentifiers = [identifier];
+
+        while (tokenSet.PeekEqual(TokenType.Dot) && tokenSet.Remaining() > 0)
+        {
+            tokenSet.Consume(TokenType.Dot);
+            var subIdentifier = tokenSet.RequiresNext(TokenType.Identifier);
+            nsIdentifiers.Add(subIdentifier.Value);
+        }
         
-        if (nextToken is not { Type: TokenType.Identifier })
-            throw new IllegalTokenSequenceException("Expected import name, but got " + nextToken?.Type);
-        
-        return new([nextToken.Value]);
+        return new(nsIdentifiers);
     }
 
-    public override LexicalScope GetLexicalScope()
+    public override PermittedLexicalScope GetLexicalScope()
     {
-        return LexicalScope.Global;
+        return PermittedLexicalScope.Global;
     }
 
     public override bool CanConsumeToken(Token nextToken)

@@ -13,8 +13,14 @@ public static class Compiler
             throw new Exception($"File not found: {filePath}");
 
         var fileContent = await File.ReadAllTextAsync(filePath);
-        var tokenSet = Tokenizer.Tokenize(filePath, fileContent);
 
-        NodeFactory.GenerateAst(tokenSet);
+        CompileSource(filePath, fileContent, packages);
+    }
+
+    public static void CompileSource(string filePath, string source, string[] packages)
+    {
+        var tokenSet = Tokenizer.Tokenize(filePath, source);
+        var ast = AstNodeFactory.GenerateAst(tokenSet);
+        Logger.Info($"Generated AST: {ast}");
     }
 }

@@ -1,3 +1,4 @@
+using Stride.Common.Logging;
 using Stride.Compiler.Ast.Nodes;
 using Stride.Compiler.Exceptions;
 using Stride.Compiler.Tokenization;
@@ -7,11 +8,11 @@ namespace Stride.Compiler.Ast.Synthesis;
 public class PackageNodeFactory : AbstractTreeNodeFactory
 {
     
-    public override AstNode? Synthesize(TokenSet tokens)
+    public override void Synthesize(TokenSet set, AstNode rootNode)
     {
-        tokens.Consume(TokenType.KeywordPackage);
+        set.Consume(TokenType.KeywordPackage);
 
-        var nextToken = tokens.Next();
+        var nextToken = set.Next();
         
         if (nextToken is not { Type: TokenType.Identifier })
             throw new IllegalTokenSequenceException("Expected package name, but got " + nextToken?.Type);
@@ -20,10 +21,10 @@ public class PackageNodeFactory : AbstractTreeNodeFactory
         
         do
         {
-            if (tokens.PeekEqual(TokenType.Dot))
+            if (set.PeekEqual(TokenType.Dot))
             {
-                tokens.Next();
-                nextToken = tokens.Next();
+                set.Next();
+                nextToken = set.Next();
                 
                 if (nextToken is not { Type: TokenType.Identifier })
                     throw new IllegalTokenSequenceException("Expected package name");
@@ -34,16 +35,18 @@ public class PackageNodeFactory : AbstractTreeNodeFactory
             {
                 break;
             }
-        } while (!tokens.PeekEqual(TokenType.Semicolon));
+        } while (!set.PeekEqual(TokenType.Semicolon) && set.Remaining() > 0);
 
-        tokens.Consume(TokenType.Semicolon); // consume semicolon
+        set.Consume(TokenType.Semicolon); // consume semicolon
         
-        return new PackageNode(packageNesting.ToArray());
+        Logger.Info($"Package {string.Join(".", packageNesting)} has been synced");
+        
+        rootNode.Children.Add(new PackageNode(packageNesting.ToArray()));
     }
 
-    public override LexicalScope GetLexicalScope()
+    public override PermittedLexicalScope GetLexicalScope()
     {
-        return LexicalScope.TopLevel;
+        return PermittedLexicalScope.Global;
     }
 
     public override bool CanConsumeToken(Token nextToken)

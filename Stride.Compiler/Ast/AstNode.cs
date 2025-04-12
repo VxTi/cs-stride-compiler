@@ -24,16 +24,12 @@ public abstract class AstNode
         Children = [];
     }
     
-    public abstract void Validate();
-    
     public class RootNode : AstNode
     {
-        public override void Validate()
-        {
-            foreach (var child in Children)
-            {
-                child.Validate();
-            }
-        }
+    }
+
+    public override string ToString()
+    {
+        return string.Join("\n", Children.Select(child => child.ToString()));
     }
 }

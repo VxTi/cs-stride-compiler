@@ -1,0 +1,13 @@
+package HelloWorld.Test;
+
+import system.io;
+
+import (
+    system.test,
+    stride.core,
+    test
+);
+
+fn main(string[] args): i8 {
+    println("Hello World!");
+}

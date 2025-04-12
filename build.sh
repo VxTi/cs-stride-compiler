@@ -7,4 +7,4 @@ dotnet publish ./Stride.CLI/Stride.CLI.csproj \
   /p:PublishSingleFile=true \
   /p:PublishTrimmed=true \
   /p:EnableCompressionInSingleFile=true \
-  -o /Users/"$USER"/.bin
+  -o /Users/"$USER"/bin

@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.Common", "Stride.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CLI", "Stride.CLI\Stride.CLI.csproj", "{947F68FD-1F2A-438B-8C32-B041003B9B24}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.Test", "Stride.Test\Stride.Test.csproj", "{2C927882-4ED1-41BF-A7A6-2B119D5FF1FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{947F68FD-1F2A-438B-8C32-B041003B9B24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{947F68FD-1F2A-438B-8C32-B041003B9B24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{947F68FD-1F2A-438B-8C32-B041003B9B24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C927882-4ED1-41BF-A7A6-2B119D5FF1FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C927882-4ED1-41BF-A7A6-2B119D5FF1FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C927882-4ED1-41BF-A7A6-2B119D5FF1FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C927882-4ED1-41BF-A7A6-2B119D5FF1FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
