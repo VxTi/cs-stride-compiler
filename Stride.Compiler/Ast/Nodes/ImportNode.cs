@@ -7,11 +7,11 @@ public class ImportNode(List<ImportNode.Import> imports) : AstNode
         return @"ImportNode: " + string.Join(", ", imports);
     }
 
-    public record Import(List<string> NamespaceSequence)
+    public record Import(Symbol Name)
     {
         public override string ToString()
         {
-            return string.Join(".", NamespaceSequence);
+            return string.Join(".", Name);
         }
     }
 }

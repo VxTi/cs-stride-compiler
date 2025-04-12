@@ -27,6 +27,13 @@ public abstract class AstNode
     public class RootNode : AstNode
     {
     }
+    
+    public virtual bool IsReducible() { return false; }
+
+    public virtual AstNode? Reduce()
+    {
+        return null;
+    }
 
     public override string ToString()
     {

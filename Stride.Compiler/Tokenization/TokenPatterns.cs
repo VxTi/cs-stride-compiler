@@ -121,6 +121,5 @@ public static class TokenPatterns
         { CompilePattern("<"), TokenType.LArrow },
         { CompilePattern("="), TokenType.Equals },
         { CompilePattern(@"\."), TokenType.Dot },
-        { CompilePattern(@"\w+"), TokenType.Keyword },
     };
 }

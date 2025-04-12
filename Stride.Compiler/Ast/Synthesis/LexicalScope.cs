@@ -20,8 +20,10 @@ public class LexicalScope
             if (indentLevel <= 0)
                 break;
         }
-        Logger.Info($"Creating subset {set.Index}, L{offset - 1})");
-        var sublist = set.Tokens.Slice(set.Index, offset - 1);
+        var sublist = set.Tokens.Slice(set.Index, offset);
+        Logger.Info($"Subset len: {sublist.Count}");
+        foreach (var subset in sublist)
+            Logger.Info($"{subset}");
         return new TokenSet(set.SourceFilePath, sublist);
     }
 }

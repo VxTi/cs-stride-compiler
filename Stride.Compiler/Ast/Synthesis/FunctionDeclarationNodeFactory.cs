@@ -34,6 +34,9 @@ public class FunctionDeclarationNodeFactory : AbstractTreeNodeFactory
         // Creates a shallow copy of the provided set, and parses the subset as block
         var subset = LexicalScope.CreateSubsetForBlockScope(set);
         AstNodeFactory.GenerateAst(parentNode, subset);
+        set.Next(subset.Remaining()); // Skip remaining tokens in subset to avoid duplicate parsing
+        
+        Logger.Info($"Remaining: {set.Remaining()}, {subset.Remaining()}");
         
         rootNode.Children.Add(parentNode);
     }
@@ -81,7 +84,7 @@ public class FunctionDeclarationNodeFactory : AbstractTreeNodeFactory
         return PermittedLexicalScope.Global;
     }
 
-    public override bool CanConsumeToken(Token nextToken)
+    public override bool CanConsumeToken(Token nextToken, TokenSet set)
     {
         return nextToken.Type is TokenType.KeywordFn or TokenType.KeywordPub or TokenType.KeywordProt;
     }

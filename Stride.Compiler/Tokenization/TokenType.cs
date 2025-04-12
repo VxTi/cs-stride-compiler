@@ -105,6 +105,5 @@ public enum TokenType
     RArrow,
     LArrow,
     Equals,
-    Dot,
-    Keyword
+    Dot
 }

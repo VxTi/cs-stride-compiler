@@ -12,31 +12,30 @@ public static class AstNodeFactory
         return rootNode;
     }
 
-    public static void GenerateAst(AstNode rootNode, TokenSet tokenSet)
+    public static void GenerateAst(AstNode rootNode, TokenSet set)
     {
-        if (tokenSet.Remaining() == 0)
+        if (set.Remaining() == 0)
             return;
         
         Logger.Log(LogLevel.Debug,
-            $"Generating AST for {tokenSet.SourceFilePath} with {tokenSet.Tokens.Count} tokens");
+            $"Generating AST for {set.SourceFilePath} with {set.Tokens.Count} tokens");
 
-        var iterations = 0;
-        while (tokenSet.Remaining() > 0)
+        while (set.Remaining() > 0)
         {
             try
             {
                 foreach (var factory in AstNodeFactoryRepository.Factories)
                 {
-                    var token = tokenSet.Peek();
+                    var token = set.Peek();
                     if (token == null)
                         throw new NullReferenceException("No token found");
 
-                    if (!factory.CanConsumeToken(token))
+                    if (!factory.CanConsumeToken(token, set))
                         continue;
                     
                     Logger.Info($"Factory: {factory.GetType().Name}");
 
-                    factory.Synthesize(tokenSet, rootNode);
+                    factory.Synthesize(set, rootNode);
                 }
             }
             catch (Exception e)
@@ -44,10 +43,6 @@ public static class AstNodeFactory
                 Logger.Error($"An error occurred: {e.Message}");
                 return;
             }
-
-            iterations++;
         }
-
-        Logger.Info($"Iterations: {iterations}");
     }
 }

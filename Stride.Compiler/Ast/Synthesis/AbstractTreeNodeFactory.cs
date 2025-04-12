@@ -23,6 +23,8 @@ public abstract class AbstractTreeNodeFactory
      * Abstraction for checking whether the next token can be consumed by this factory.
      * This is used to determine which factory to use when synthesizing a node.
      * <param name="nextToken">The next token to check.</param>
+     * <param name="set">The current token set. This can be used for further token checking,
+     * if the sequence is more complex.</param>
      */
-    public abstract bool CanConsumeToken(Token nextToken);
+    public abstract bool CanConsumeToken(Token nextToken, TokenSet set);
 }

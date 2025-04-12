@@ -1,9 +1,9 @@
 namespace Stride.Compiler.Ast.Nodes;
 
-public class PackageNode(string[] packageNesting) : AstNode
+public class PackageNode(Symbol name) : AstNode
 {
     public override string ToString()
     {
-        return $"PackageNode ({string.Join(".", packageNesting)})";
+        return $"PackageNode ({string.Join(".", name)})";
     }
 }

@@ -37,11 +37,8 @@ public class PackageNodeFactory : AbstractTreeNodeFactory
             }
         } while (!set.PeekEqual(TokenType.Semicolon) && set.Remaining() > 0);
 
-        set.Consume(TokenType.Semicolon); // consume semicolon
-        
-        Logger.Info($"Package {string.Join(".", packageNesting)} has been synced");
-        
-        rootNode.Children.Add(new PackageNode(packageNesting.ToArray()));
+        set.ConsumeOptional(TokenType.Semicolon);
+        rootNode.Children.Add(new PackageNode(new Symbol(packageNesting)));
     }
 
     public override PermittedLexicalScope GetLexicalScope()
@@ -49,7 +46,7 @@ public class PackageNodeFactory : AbstractTreeNodeFactory
         return PermittedLexicalScope.Global;
     }
 
-    public override bool CanConsumeToken(Token nextToken)
+    public override bool CanConsumeToken(Token nextToken, TokenSet set)
     {
         return nextToken.Type == TokenType.KeywordPackage;
     }

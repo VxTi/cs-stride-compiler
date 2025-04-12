@@ -11,8 +11,6 @@ public class ImportNodeFactory : AbstractTreeNodeFactory
     {
         set.Consume(TokenType.KeywordImport);
         
-        Logger.Info("Parsing import");
-
         if (set.PeekEqual(TokenType.LParenthesis))
         {
             var imports = ParseSequentialImports(set);
@@ -57,7 +55,7 @@ public class ImportNodeFactory : AbstractTreeNodeFactory
             nsIdentifiers.Add(subIdentifier.Value);
         }
         
-        return new(nsIdentifiers);
+        return new(new Symbol(nsIdentifiers));
     }
 
     public override PermittedLexicalScope GetLexicalScope()
@@ -65,7 +63,7 @@ public class ImportNodeFactory : AbstractTreeNodeFactory
         return PermittedLexicalScope.Global;
     }
 
-    public override bool CanConsumeToken(Token nextToken)
+    public override bool CanConsumeToken(Token nextToken, TokenSet set)
     {
         return nextToken.Type == TokenType.KeywordImport;
     }

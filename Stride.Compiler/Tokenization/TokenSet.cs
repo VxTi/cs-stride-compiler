@@ -17,12 +17,14 @@ public class TokenSet(string sourceFilePath, List<Token> tokens)
 
     public int Remaining()
     {
-        return Tokens.Count - Index - 1;
+        if (tokens.Count == 0)
+            return 0;
+        
+        return Tokens.Count - (Index + 1);
     }
     
     public Token? Peek(int offset = 0)
     {
-        Logger.Info($"Peaking: {(Index + offset >= Tokens.Count ? null : Tokens[Index + offset])} {Index + offset}");
         return Index + offset >= Tokens.Count ? null : Tokens[Index + offset];
     }
 
@@ -68,13 +70,13 @@ public class TokenSet(string sourceFilePath, List<Token> tokens)
         return next;
     }
 
-    public Token? Next()
+    public Token? Next(int offset = 1)
     {
         if (Index >= Tokens.Count)
             return null;
 
         var token = Tokens[Index];
-        Index++;
+        Index += offset;
         return token;
     }
 
