@@ -8,11 +8,12 @@ import (
     test
 );
 
-fn main(string[] args): i8 {
-    println("Hello World!");
-}
-
-pub fn Test(i8 arg1, f32 arg2): void
+fn Test(i8 arg1, f32 arg2): void
 {
 
 }
+
+fn main(string[] args): i8 {
+    # println("Hello World!");
+}
+

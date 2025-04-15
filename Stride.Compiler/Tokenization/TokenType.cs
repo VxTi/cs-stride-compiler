@@ -14,7 +14,7 @@ public enum TokenType
     KeywordIf,
     KeywordElse,
     KeywordClass,
-    KeywordConst,
+    KeywordMut,
     KeywordAsync,
     KeywordThis,
     KeywordEnum,

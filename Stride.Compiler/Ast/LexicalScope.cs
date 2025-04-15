@@ -1,6 +1,6 @@
 namespace Stride.Compiler.Ast;
 
-public enum PermittedLexicalScope
+public enum LexicalScope
 {
     Global,
     Block,

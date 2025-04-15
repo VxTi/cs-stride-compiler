@@ -19,7 +19,7 @@ public class PackageManagementCommands : ICommandFactory
 
             if (File.Exists(configPath))
             {
-                Logger.Log(LogLevel.Warn, "Project config file already exists.", "\n", "\n");
+                Logger.Warn("Project config file already exists.");
                 return;
             }
 
@@ -36,7 +36,7 @@ public class PackageManagementCommands : ICommandFactory
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, $"Failed to initialize project: {ex}", "\n", "\n");
+                Logger.Error($"Failed to initialize project: {ex}");
                 return;
             }
 
@@ -50,7 +50,7 @@ public class PackageManagementCommands : ICommandFactory
             {
                 project.PackageCache.Clear();
                 project.PackageCache.UpdateConfigFile();
-                Logger.Log(LogLevel.Info, $"Package cache has been cleaned.");
+                Logger.Info("Package cache has been cleaned.");
             }));
 
         var cCacheRefresh = new Command("refresh", "Refresh the project dependencies.");
@@ -58,7 +58,7 @@ public class PackageManagementCommands : ICommandFactory
             CliUtilities.TryRunForProject((project) =>
             {
                 project.PackageCache.Refresh();
-                Logger.Log(LogLevel.Info, $"Package cache has been refreshed.");
+                Logger.Info($"Package cache has been refreshed.");
             }));
 
         var cCache = new Command("cache", "Cache the project dependencies.");
@@ -107,8 +107,7 @@ public class PackageManagementCommands : ICommandFactory
 
                 var removed = PackageManager.UninstallPackages(project, dependencies);
                 var pluralized = removed == 1 ? "dependency" : "dependencies";
-                Logger.Log(LogLevel.Info,
-                    removed == 0 ? "No dependencies removed." : $"Removed {removed} {pluralized}");
+                Logger.Info(removed == 0 ? "No dependencies removed." : $"Removed {removed} {pluralized}");
             }), cArgDependencyName);
 
         var cListPackages = new Command("list", "List all installed dependencies.");

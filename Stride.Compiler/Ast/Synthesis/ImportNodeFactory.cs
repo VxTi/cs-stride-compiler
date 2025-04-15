@@ -7,7 +7,7 @@ namespace Stride.Compiler.Ast.Synthesis;
 
 public class ImportNodeFactory : AbstractTreeNodeFactory
 {
-    public override void Synthesize(TokenSet set, AstNode rootNode)
+    public override void Synthesize(TokenSet set, AstNode rootNode, ContextMetadata? metadata)
     {
         set.Consume(TokenType.KeywordImport);
         
@@ -45,22 +45,12 @@ public class ImportNodeFactory : AbstractTreeNodeFactory
     
     private static ImportNode.Import ParseImportEntry(TokenSet tokenSet)
     {
-        var identifier = tokenSet.RequiresNext(TokenType.Identifier).Value;
-        List<string> nsIdentifiers = [identifier];
-
-        while (tokenSet.PeekEqual(TokenType.Dot) && tokenSet.Remaining() > 0)
-        {
-            tokenSet.Consume(TokenType.Dot);
-            var subIdentifier = tokenSet.RequiresNext(TokenType.Identifier);
-            nsIdentifiers.Add(subIdentifier.Value);
-        }
-        
-        return new(new Symbol(nsIdentifiers));
+        return new(Symbol.FromTokenSet(tokenSet));
     }
 
-    public override PermittedLexicalScope GetLexicalScope()
+    public override LexicalScope GetLexicalScope()
     {
-        return PermittedLexicalScope.Global;
+        return LexicalScope.Global;
     }
 
     public override bool CanConsumeToken(Token nextToken, TokenSet set)

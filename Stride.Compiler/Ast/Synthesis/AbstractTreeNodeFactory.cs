@@ -9,15 +9,16 @@ public abstract class AbstractTreeNodeFactory
      * This method should be implemented by subclasses to create specific node types.
      * <param name="set">The token set to synthesize from.</param>
      * <param name="rootNode">The root node of the AST</param>
+     * <param name="metadata">Additional metadata provided by previous AST factories</param>
      * <returns>The synthesized node, or null if the synthesis failed.</returns>
      */
-    public abstract void Synthesize(TokenSet set, AstNode rootNode);
+    public abstract void Synthesize(TokenSet set, AstNode rootNode, ContextMetadata metadata);
 
     /**
      * The type of node this factory can synthesize.
      * This is used to determine which factory to use when synthesizing a node.
      */
-    public abstract PermittedLexicalScope GetLexicalScope();
+    public abstract LexicalScope GetLexicalScope();
 
     /**
      * Abstraction for checking whether the next token can be consumed by this factory.

@@ -9,10 +9,10 @@ namespace Stride.Compiler.Ast.Synthesis;
 
 public class FunctionDeclarationNodeFactory : AbstractTreeNodeFactory
 {
-    public override void Synthesize(TokenSet set, AstNode rootNode)
+    public override void Synthesize(TokenSet set, AstNode rootNode, ContextMetadata ctx)
     {
-        var accessibility = GetFunctionAccessibility(set);
-        Logger.Info($"Accessibility: {accessibility}");
+        var accessModifier = GetFunctionAccessibility(set);
+        Logger.Info($"AccessModifier: {accessModifier}");
         
         var functionName = set.RequiresNext(TokenType.Identifier).Value;
         set.Consume(TokenType.LParenthesis);
@@ -28,16 +28,11 @@ public class FunctionDeclarationNodeFactory : AbstractTreeNodeFactory
             functionName,
             arguments,
             returnType,
-            accessibility
+            accessModifier
         );
 
         // Creates a shallow copy of the provided set, and parses the subset as block
-        var subset = LexicalScope.CreateSubsetForBlockScope(set);
-        AstNodeFactory.GenerateAst(parentNode, subset);
-        set.Next(subset.Remaining()); // Skip remaining tokens in subset to avoid duplicate parsing
-        
-        Logger.Info($"Remaining: {set.Remaining()}, {subset.Remaining()}");
-        
+        AstNodeFactory.ParseBlock(set, parentNode, ctx);
         rootNode.Children.Add(parentNode);
     }
 
@@ -64,7 +59,7 @@ public class FunctionDeclarationNodeFactory : AbstractTreeNodeFactory
         return new(name, type);
     }
 
-    private static Accessibility GetFunctionAccessibility(TokenSet set)
+    private static AccessModifier GetFunctionAccessibility(TokenSet set)
     {
         var token = set.Next();
         if (token == null)
@@ -72,16 +67,16 @@ public class FunctionDeclarationNodeFactory : AbstractTreeNodeFactory
         
         return token?.Type switch
         {
-            TokenType.KeywordPub => Accessibility.Public,
-            TokenType.KeywordProt => Accessibility.PackagePrivate,
-            TokenType.KeywordFn => Accessibility.Private,
+            TokenType.KeywordPub => AccessModifier.Public,
+            TokenType.KeywordProt => AccessModifier.PackagePrivate,
+            TokenType.KeywordFn => AccessModifier.Private,
             _ => throw new NotSupportedException($"Function accessibility {token} is not supported.")
         };
     }
 
-    public override PermittedLexicalScope GetLexicalScope()
+    public override LexicalScope GetLexicalScope()
     {
-        return PermittedLexicalScope.Global;
+        return LexicalScope.Global;
     }
 
     public override bool CanConsumeToken(Token nextToken, TokenSet set)

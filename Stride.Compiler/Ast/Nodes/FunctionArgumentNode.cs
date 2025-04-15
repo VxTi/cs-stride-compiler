@@ -6,6 +6,6 @@ public class FunctionArgumentNode(string ArgName, InternalType ArgType) : AstNod
 {
     public override string ToString()
     {
-        return $"Arg({ArgName}): {ArgType}";
+        return $"({ArgName}): {ArgType}";
     }
 }

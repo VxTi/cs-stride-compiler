@@ -8,11 +8,11 @@ public class FunctionDeclarationNode(
     string functionName,
     List<FunctionArgumentNode> functionArguments,
     InternalType returnType,
-    Accessibility accessibility = Accessibility.Private
+    AccessModifier accessModifier = AccessModifier.Private
 ) : AstNode
 {
     public override string ToString()
     {
-        return $"Function {functionName} ({accessibility}): {string.Join(",", functionArguments.Select(arg => arg.ToString()))} -> {returnType}";
+        return $"Function {functionName} ({accessModifier}): Arguments[ {string.Join(", ", functionArguments.Select(arg => arg.ToString()))} ) -> {returnType}";
     }
 }

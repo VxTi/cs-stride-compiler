@@ -2,7 +2,7 @@ using Stride.Compiler.Tokenization;
 
 namespace Stride.Compiler.Ast.Nodes;
 
-public class AtomicValueNode : AstNode
+public class AtomicValueNode : Expression
 {
     public enum NumberType
     {

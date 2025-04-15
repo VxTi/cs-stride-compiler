@@ -6,4 +6,10 @@ public class FunctionInvocationNode(Symbol name, List<Expression> arguments) : A
     {
         return $"Invoke ${name} ({string.Join(", ", arguments)})";
     }
+
+    public bool IsPure()
+    {
+        // TODO: Implemente
+        return false;
+    }
 }

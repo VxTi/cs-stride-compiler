@@ -6,7 +6,7 @@ namespace Stride.Compiler.Ast.Synthesis;
 
 public class ExpressionNodeFactory : AbstractTreeNodeFactory
 {
-    public override void Synthesize(TokenSet set, AstNode rootNode)
+    public override void Synthesize(TokenSet set, AstNode rootNode, ContextMetadata? metadata)
     {
         var exprLen = 0;
         while (!set.PeekEqual(TokenType.Semicolon))
@@ -33,9 +33,9 @@ public class ExpressionNodeFactory : AbstractTreeNodeFactory
         };
     }
 
-    public override PermittedLexicalScope GetLexicalScope()
+    public override LexicalScope GetLexicalScope()
     {
-        return PermittedLexicalScope.Global;
+        return LexicalScope.Global;
     }
 
     public override bool CanConsumeToken(Token nextToken, TokenSet set)

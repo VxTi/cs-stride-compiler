@@ -28,7 +28,7 @@ public static class TokenPatterns
         { CompilePattern(@"if\b"), TokenType.KeywordIf },
         { CompilePattern(@"else\b"), TokenType.KeywordElse },
         { CompilePattern(@"class\b"), TokenType.KeywordClass },
-        { CompilePattern(@"const\b"), TokenType.KeywordConst },
+        { CompilePattern(@"mut\b"), TokenType.KeywordMut },
         { CompilePattern(@"async\b"), TokenType.KeywordAsync },
         { CompilePattern(@"this\b"), TokenType.KeywordThis },
         { CompilePattern(@"enum\b"), TokenType.KeywordEnum },
